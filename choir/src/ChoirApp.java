@@ -11,7 +11,8 @@ import javax.swing.JOptionPane;
 public class ChoirApp {
 
 	public static void main(String[] args) throws Exception {
-		if (args.length == 0)
+		System.out.println("Starting");
+		if (args.length == 0) 
 			args = new String[] { "run", "C:\\Users\\SampsaLaine\\Documents\\eclipse\\choir/data.db" };
 		ChoirController cc = new ChoirController(args[1]);
 		ChoirUI ui = cc.getUi();
