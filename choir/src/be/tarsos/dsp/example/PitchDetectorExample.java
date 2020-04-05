@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.sound.sampled.AudioFormat;
@@ -52,6 +53,7 @@ import be.tarsos.dsp.pitch.PitchDetectionHandler;
 import be.tarsos.dsp.pitch.PitchDetectionResult;
 import be.tarsos.dsp.pitch.PitchProcessor;
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
+import fi.datarangers.dmtools.common.GeneralException;
 
 public class PitchDetectorExample extends JFrame implements PitchDetectionHandler {
 
@@ -154,8 +156,7 @@ public class PitchDetectorExample extends JFrame implements PitchDetectionHandle
 		new Thread(dispatcher,"Audio dispatching").start();
 	}
 
-	public static void main(String... strings) throws InterruptedException,
-			InvocationTargetException {
+	public static void main(String[] args) throws Exception {
 		SwingUtilities.invokeAndWait(new Runnable() {
 			@Override
 			public void run() {
