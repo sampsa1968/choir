@@ -1,4 +1,5 @@
 package fi.choir.digi;
+
 /**
  * The technical recording of a Singers performance of a Song
  * 
@@ -11,4 +12,11 @@ public class Track {
 	Choir choir;
 	byte[] audioBytes;
 	byte[] videoBytes;
+	int sampleRate;
+	String format;
+	
+	public double[] getSignal() {
+		
+		return null;
+	}
 }

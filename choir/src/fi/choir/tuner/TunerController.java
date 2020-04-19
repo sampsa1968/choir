@@ -2,6 +2,7 @@ package fi.choir.tuner;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -15,6 +16,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import be.tarsos.dsp.AudioDispatcher;
 import be.tarsos.dsp.AudioEvent;
 import be.tarsos.dsp.AudioProcessor;
+import be.tarsos.dsp.example.Shared;
 import be.tarsos.dsp.io.jvm.AudioDispatcherFactory;
 import be.tarsos.dsp.io.jvm.AudioPlayer;
 import be.tarsos.dsp.io.jvm.JVMAudioInputStream;
@@ -52,6 +54,15 @@ public class TunerController {
 	}
 
 	public TunerController() throws GeneralException {
+		Collection<Mixer.Info> mixs = Shared.getMixerInfo(false, true);
+		Mixer.Info first = mixs.iterator().next();
+		Mixer mix = AudioSystem.getMixer(first);
+		try {
+			setMixer(mix);
+			setPitchAlgorithm(PitchEstimationAlgorithm.YIN);
+		} catch (Exception e) {
+			throw new GeneralException(e);
+		}
 	}
 
 	public void exit() {
@@ -220,8 +231,8 @@ public class TunerController {
 		return view;
 	}
 
-	public void setPitchAlgorithm(String name) {
-		PitchEstimationAlgorithm newAlgo = PitchEstimationAlgorithm.valueOf(name);
+	public void setPitchAlgorithm(PitchEstimationAlgorithm newAlgo) {
+//		PitchEstimationAlgorithm newAlgo = PitchEstimationAlgorithm.valueOf(name);
 		algo = newAlgo;
 		try {
 			setMixer(currentMixer);

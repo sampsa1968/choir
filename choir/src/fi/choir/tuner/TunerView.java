@@ -28,7 +28,7 @@ import javax.swing.event.CaretListener;
 
 import be.tarsos.dsp.example.InputPanel;
 import be.tarsos.dsp.example.PitchDetectionPanel;
-import be.tarsos.dsp.util.fft.FFT;
+import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 import fi.datarangers.dmtools.common.GeneralException;
 import fi.datarangers.dmtools.data.Data;
 import fi.datarangers.dmtools.event.StatusMonitor;
@@ -211,7 +211,8 @@ public class TunerView extends JPanel {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				String name = e.getActionCommand();
-				getController().setPitchAlgorithm(name);
+				PitchEstimationAlgorithm newAlgo = PitchEstimationAlgorithm.valueOf(name);
+				getController().setPitchAlgorithm(newAlgo);
 			}
 		};
 		return algoListener;

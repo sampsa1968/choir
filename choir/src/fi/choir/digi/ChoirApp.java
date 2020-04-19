@@ -15,9 +15,10 @@ public class ChoirApp {
 		System.out.println("Starting 3");
 		if (args.length == 0) 
 			args = new String[] { "run", "C:\\Users\\SampsaLaine\\Documents\\eclipse\\choir/data.db" };
-		ChoirController cc = new ChoirController(args[1]);
-		ChoirUI ui = cc.getUi();
-		JOptionPane.showMessageDialog(null, ui);
+//		ChoirController cc = new ChoirController(args[1]);
+//		ChoirUI ui = cc.getUi();
+//		JOptionPane.showMessageDialog(null, ui);
+//		ChoirTest.autotune();
 	}
 
 }
