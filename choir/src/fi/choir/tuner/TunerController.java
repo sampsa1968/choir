@@ -37,7 +37,7 @@ public class TunerController {
 
 	private TunerView view;
 	private TunerModel model;
-	private Thread recorder;
+	private Thread recorder, playAnalyzer;
 	private AudioDispatcher dispatcher;
 
 	private int bufferSize = 1024 * 4;
@@ -249,6 +249,10 @@ public class TunerController {
 
 	public void play() {
 		getModel().play();
+
+		playAnalyzer = new Thread(dispatcher, "Play dispatching");
+		playAnalyzer.start();
+
 		fireMajorStep();
 	}
 
@@ -264,6 +268,10 @@ public class TunerController {
 
 	public void stop() {
 		getModel().stop();
+
+		if (playAnalyzer != null)
+			playAnalyzer.stop();
+
 		fireMajorStep();
 	}
 
