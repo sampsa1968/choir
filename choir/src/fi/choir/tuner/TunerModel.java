@@ -2,14 +2,20 @@ package fi.choir.tuner;
 
 import java.io.File;
 
+import be.tarsos.dsp.pitch.PitchDetectionResult;
+import be.tarsos.dsp.pitch.PitchDetector;
+import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm;
 import fi.choir.tuner.SoundUtil.SoundException;
 import fi.datarangers.dmtools.common.GeneralException;
 import fi.datarangers.dmtools.data.Data;
+import fi.datarangers.dmtools.data.ListData;
+import fi.datarangers.dmtools.data.ListVariable;
 import fi.datarangers.dmtools.data.Variable;
 import fi.datarangers.dmtools.event.StatusMonitor;
 import fi.datarangers.dmtools.math.ArrayMath;
 import fi.datarangers.dmtools.math.VariableMath;
 import fi.datarangers.dmtools.math.som.Som;
+import fi.datarangers.dmtools.util.ArrayUtil;
 import fi.datarangers.dmtools.util.DataUtil;
 import fi.datarangers.dmtools.util.GuiUtil;
 import fi.datarangers.dmtools.util.VariableUtil;
@@ -35,16 +41,12 @@ public class TunerModel {
 		GuiUtil.initGui();
 		StatusMonitor.setHeadless(true);
 
-		String file = "C:\\Users\\SampsaLaine\\Dropbox (Personal)\\Kuoro\\Tuner\\souda souda sinisorsa.wav";
+		String file = "C:\\Users\\SampsaLaine\\Documents\\Dropbox (Personal)\\Kuoro\\Tuner\\souda souda sinisorsa.wav";
 		TunerController c = new TunerController();
-		TunerModel model = new TunerModel(c);
+		TunerModel model = c.getModel();
 		model.load(new File(file));
 
-		Data spec = model.getSpektrogram();
-		Som som = model.getSom();
-
-		model.setPreferredArea(new int[] { 1, 2, 3, 4 });
-		model.getScores();
+		c.getPitch();
 	}
 
 	private void getScores() {
@@ -195,6 +197,32 @@ public class TunerModel {
 
 	public void setAnalysisLength(double analysisLength) {
 		this.analysisLength = analysisLength;
+	}
+
+	public Data getPitch(PitchEstimationAlgorithm calgorithm, int cbufferSize) {
+
+		Data ret = new ListData();
+		Variable time = new ListVariable("time");
+		Variable freq = new ListVariable("freq");
+		ret.setLabels(time);
+		ret.addVariable(freq);
+
+		PitchDetector cdetector = calgorithm.getDetector(sampleRate, cbufferSize);
+
+		Data sigd = getSignal();
+		double[] sig = getSignal().getVariable(0).getDoubleArray();
+		float[] sigf = ArrayUtil.floatArray(sig);
+		for (int i = 0; i < sig.length - cbufferSize; i += cbufferSize) {
+			float[] part = ArrayUtil.getRows(sigf, i, i + cbufferSize);
+			PitchDetectionResult result = cdetector.getPitch(part);
+			boolean succ = result.isPitched();
+			if (succ) {
+				time.addCell(sigd.getLabel(i));
+				freq.addCell(result.getPitch());
+			}
+		}
+
+		return ret;
 	}
 
 }

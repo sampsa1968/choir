@@ -28,6 +28,7 @@ import be.tarsos.dsp.util.fft.FFT;
 import fi.datarangers.dmtools.common.GeneralException;
 import fi.datarangers.dmtools.data.Data;
 import fi.datarangers.dmtools.data.Variable;
+import fi.datarangers.dmtools.gui.plotter.LinePlotBrowser;
 import fi.datarangers.dmtools.math.ArrayMath;
 import fi.datarangers.dmtools.math.som.Som;
 import fi.datarangers.dmtools.util.ArrayUtil;
@@ -80,8 +81,9 @@ public class TunerController {
 	}
 
 	public TunerModel getModel() {
-		if (model == null)
+		if (model == null) {
 			model = new TunerModel(this);
+		}
 		return model;
 	}
 
@@ -329,6 +331,11 @@ public class TunerController {
 				e.printStackTrace();
 			}
 		return true;
+	}
+
+	void getPitch() {
+		Data pit = getModel().getPitch(algo, bufferSize);
+		LinePlotBrowser.showPlot(pit);
 	}
 
 }
