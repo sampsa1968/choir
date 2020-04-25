@@ -23,3 +23,9 @@ print('Estimated tempo: {:.2f} beats per minute'.format(tempo))
 
 # 4. Convert the frame indices of beat events into timestamps
 beat_times = librosa.frames_to_time(beat_frames, sr=sr)
+
+import soundfile as sf
+
+# Get example audio file
+filename = librosa.util.example_audio_file()
+data, samplerate = sf.read(filename, dtype='float32')
